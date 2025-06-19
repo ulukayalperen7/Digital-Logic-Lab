@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.alperenulukaya</groupId>
+    <artifactId>digitalsim</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Specifying that our project uses Java 17 -->
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <!-- Defining the JavaFX version as a property for cleaner management -->
+        <javafx.version>17.0.10</javafx.version>
+    </properties>
+
+    <dependencies>
+        <!-- JavaFX Controls module (for Button, Label, etc.) -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <!-- JavaFX FXML module (good to have for potential future use) -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Updating the Java compiler plugin and its settings -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+            <!-- Updating the JavaFX Maven plugin and specifying the correct main class -->
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <executions>
+                    <execution>
+                        <!-- Default configuration for running from the command line -->
+                        <!-- Usage: mvn clean javafx:run -->
+                        <id>default-cli</id>
+                        <configuration>
+                            <!-- This is the most critical change: specifying our main class -->
+                            <mainClass>com.alperenulukaya.MainApp</mainClass>
+                            <!-- These options are the Maven equivalent of the vmArgs in launch.json -->
+                            <!-- It ensures the required modules are accessible at runtime -->
+                            <options>
+                                <option>--add-modules</option>
+                                <option>javafx.controls,javafx.fxml</option>
+                            </options>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
