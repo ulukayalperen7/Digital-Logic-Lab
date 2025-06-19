@@ -1,7 +1,10 @@
+
 package com.alperenulukaya.modules;
 
+import java.util.Map;
 
-import com.alperenulukaya.logic.DLatch;
+import com.alperenulukaya.logic.DLatch; // GÜNCELLEME 1
+import com.alperenulukaya.util.TimingDiagram;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,8 +23,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 /**
- * A UI module to demonstrate the behavior of a Gated D Latch.
- * Allows interaction with D (Data) and E (Enable) inputs.
+ * A UI module to demonstrate the behavior of a Gated D Latch,
+ * now including a real-time timing diagram.
  */
 public class DLatchModule {
 
@@ -32,6 +35,7 @@ public class DLatchModule {
     private Circle qLed;
     private Text stateDescription;
     private Button dButton, eButton;
+    private TimingDiagram timingDiagram; // GÜNCELLEME 2
     
     // --- State Variables ---
     private boolean dInput = false;
@@ -49,16 +53,22 @@ public class DLatchModule {
         view.setAlignment(Pos.TOP_CENTER);
         
         Label title = createTitleArea();
-        HBox interactionArea = createInteractionArea();
+        
+        // GÜNCELLEME 3: Arayüz yapısını değiştiriyoruz
+        VBox leftPanel = createLeftPanel(); // Inputs and circuit
+        VBox rightPanel = createRightPanel(); // Outputs and timing diagram
+        HBox interactionArea = new HBox(50, leftPanel, rightPanel);
+        interactionArea.setAlignment(Pos.CENTER);
 
         view.getChildren().addAll(title, interactionArea);
         
-        Button resetButton = new Button("Reset Latch");
+        Button resetButton = new Button("Reset Latch & Diagram");
         resetButton.setFont(Font.font(16));
         resetButton.setOnAction(e -> {
             latch.reset();
             dInput = false;
             eInput = false;
+            timingDiagram.clear(); // Clear the diagram history
             updateInputsAndLogic();
         });
         view.getChildren().add(resetButton);
@@ -75,39 +85,44 @@ public class DLatchModule {
     }
 
     private Label createTitleArea() {
-        Label title = new Label("Gated D Latch Simulator");
+        Label title = new Label("Gated D Latch with Timing Diagram");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
         title.setTextFill(Color.WHITE);
         title.setPadding(new Insets(0, 0, 20, 0));
         return title;
     }
-
-    private HBox createInteractionArea() {
+    
+    // Helper method for the new layout
+    private VBox createLeftPanel() {
         VBox inputs = createInputControls();
         Pane circuit = createCircuitDiagram();
+        
+        VBox leftPanel = new VBox(40, inputs, circuit);
+        leftPanel.setAlignment(Pos.CENTER);
+        return leftPanel;
+    }
+    
+    // Helper method for the new layout
+    private VBox createRightPanel() {
         VBox outputs = createOutputDisplays();
         
-        HBox mainBox = new HBox(50, inputs, circuit, outputs);
-        mainBox.setAlignment(Pos.CENTER);
-        return mainBox;
+        // Initialize the timing diagram
+        timingDiagram = new TimingDiagram(500, "E", "D", "Q");
+        
+        VBox rightPanel = new VBox(40, outputs, timingDiagram.getCanvas());
+        rightPanel.setAlignment(Pos.CENTER);
+        return rightPanel;
     }
 
     private VBox createInputControls() {
-        Label dLabel = new Label("D (Data)");
-        dLabel.setFont(Font.font(20));
-        dLabel.setTextFill(Color.WHITE);
         dButton = new Button("D=0");
         dButton.setStyle(BUTTON_INACTIVE_STYLE);
         dButton.setPrefWidth(120);
 
-        Label eLabel = new Label("E (Enable)");
-        eLabel.setFont(Font.font(20));
-        eLabel.setTextFill(Color.WHITE);
         eButton = new Button("E=0");
         eButton.setStyle(BUTTON_INACTIVE_STYLE);
         eButton.setPrefWidth(120);
 
-        // Toggle buttons
         dButton.setOnAction(e -> {
             dInput = !dInput;
             updateInputsAndLogic();
@@ -118,9 +133,11 @@ public class DLatchModule {
             updateInputsAndLogic();
         });
         
-        VBox inputBox = new VBox(10, dLabel, dButton, new Label(), eLabel, eButton);
-        inputBox.setAlignment(Pos.CENTER_LEFT);
-        inputBox.setPadding(new Insets(0, 0, 0, 20));
+        HBox buttonBox = new HBox(20, dButton, eButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        
+        VBox inputBox = new VBox(10, buttonBox);
+        inputBox.setAlignment(Pos.CENTER);
         return inputBox;
     }
 
@@ -133,11 +150,12 @@ public class DLatchModule {
         
         stateDescription = new Text("State: Opaque (Hold)");
         stateDescription.setFont(Font.font("Consolas", 18));
-        stateDescription.setFill(Color.ORANGE);
-
-        VBox outputBox = new VBox(20, qLabel, qLed, new Label(), stateDescription);
+        
+        HBox qBox = new HBox(20, qLabel, qLed);
+        qBox.setAlignment(Pos.CENTER);
+        
+        VBox outputBox = new VBox(20, qBox, stateDescription);
         outputBox.setAlignment(Pos.CENTER);
-        outputBox.setPadding(new Insets(0, 20, 0, 0));
         return outputBox;
     }
     
@@ -171,17 +189,21 @@ public class DLatchModule {
     }
 
     private void updateInputsAndLogic() {
-        // Update button appearance
         dButton.setText("D=" + (dInput ? "1" : "0"));
         dButton.setStyle(dInput ? BUTTON_ACTIVE_STYLE : BUTTON_INACTIVE_STYLE);
         
         eButton.setText("E=" + (eInput ? "1" : "0"));
         eButton.setStyle(eInput ? BUTTON_ACTIVE_STYLE : BUTTON_INACTIVE_STYLE);
         
-        // Update the core logic
         latch.update(dInput, eInput);
         
-        // Update the entire UI based on the new state
+        // GÜNCELLEME 4: Add the current state to the timing diagram
+        timingDiagram.addState(Map.of(
+            "E", eInput,
+            "D", dInput,
+            "Q", latch.getQ()
+        ));
+        
         updateUI();
     }
     
