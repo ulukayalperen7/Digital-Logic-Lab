@@ -1,10 +1,14 @@
-
+// FILE: src/main/java/com/alperenulukaya/MainApp.java
 package com.alperenulukaya;
 
 import com.alperenulukaya.modules.CounterModule;
+import com.alperenulukaya.modules.DLatchModule;
+import com.alperenulukaya.modules.JKFlipFlopModule;
 import com.alperenulukaya.modules.SRLatchModule;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -27,10 +31,11 @@ public class MainApp extends Application {
     private BorderPane root;
     private Stage primaryStage;
     
-   
+    // Module instances to preserve their state
     private CounterModule counterModule;
     private SRLatchModule srLatchModule;
-    // Future modules will be added here
+    private DLatchModule dLatchModule;
+    private JKFlipFlopModule jkFlipFlopModule;
 
     @Override
     public void start(Stage primaryStage) {
@@ -56,34 +61,37 @@ public class MainApp extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Creates the left-side menu with buttons for each module.
+     */
     private VBox createMenu() {
         VBox menuBox = new VBox(10);
         menuBox.setPadding(new Insets(20));
         menuBox.setStyle("-fx-background-color: #3C3F41; -fx-border-color: #2B2B2B; -fx-border-width: 0 1 0 0;");
         menuBox.setPrefWidth(220);
 
-        Button counterButton = new Button("4-Bit Sync. Counter");
-        counterButton.setMaxWidth(Double.MAX_VALUE);
-        counterButton.setOnAction(e -> showCounterModule());
-        
-        Button srLatchButton = new Button("SR Latch");
-        srLatchButton.setMaxWidth(Double.MAX_VALUE);
-        srLatchButton.setDisable(false); 
-        srLatchButton.setOnAction(e -> showSRLatchModule()); 
-
-        Button dLatchButton = new Button("D Latch & Timing (Soon)");
-        dLatchButton.setMaxWidth(Double.MAX_VALUE);
-        dLatchButton.setDisable(true);
+        Button counterButton = createMenuButton("4-Bit Sync. Counter", e -> showCounterModule());
+        Button srLatchButton = createMenuButton("SR Latch", e -> showSRLatchModule());
+        Button dLatchButton = createMenuButton("Gated D Latch", e -> showDLatchModule());
+        Button jkFlipFlopButton = createMenuButton("JK Flip-Flop", e -> showJKFlipFlopModule());
         
         menuBox.getChildren().addAll(
             createMenuHeader("Applications"),
             counterButton,
             createMenuHeader("Latches & Flip-Flops"),
             srLatchButton,
-            dLatchButton
+            dLatchButton,
+            jkFlipFlopButton
         );
 
         return menuBox;
+    }
+
+    private Button createMenuButton(String text, EventHandler<ActionEvent> handler) {
+        Button button = new Button(text);
+        button.setMaxWidth(Double.MAX_VALUE);
+        button.setOnAction(handler);
+        return button;
     }
 
     private Label createMenuHeader(String text) {
@@ -105,34 +113,45 @@ public class MainApp extends Application {
         return centerBox;
     }
     
-    private void switchModule(Node newModuleView) {
+    private void switchModule(Node newModuleView, String title) {
         stopAllTimelines();
         root.setCenter(newModuleView);
+        primaryStage.setTitle("Digital Lab - " + title);
     }
 
     private void showCounterModule() {
         if (counterModule == null) {
             counterModule = new CounterModule();
         }
-        switchModule(counterModule.getView());
-        primaryStage.setTitle("Digital Lab - 4-Bit Counter");
+        switchModule(counterModule.getView(), "4-Bit Counter");
     }
     
     private void showSRLatchModule() {
         if (srLatchModule == null) {
             srLatchModule = new SRLatchModule();
         }
-        switchModule(srLatchModule.getView());
-        primaryStage.setTitle("Digital Lab - SR Latch");
+        switchModule(srLatchModule.getView(), "SR Latch");
+    }
+
+    private void showDLatchModule() {
+        if (dLatchModule == null) {
+            dLatchModule = new DLatchModule();
+        }
+        switchModule(dLatchModule.getView(), "D Latch");
+    }
+
+    private void showJKFlipFlopModule() {
+        if (jkFlipFlopModule == null) {
+            jkFlipFlopModule = new JKFlipFlopModule();
+        }
+        switchModule(jkFlipFlopModule.getView(), "JK Flip-Flop");
     }
     
     private void stopAllTimelines() {
-        if (counterModule != null) {
-            counterModule.stopTimeline();
-        }
-        if (srLatchModule != null) {
-            srLatchModule.stopTimeline(); 
-        }
+        if (counterModule != null) counterModule.stopTimeline();
+        if (srLatchModule != null) srLatchModule.stopTimeline();
+        if (dLatchModule != null) dLatchModule.stopTimeline();
+        if (jkFlipFlopModule != null) jkFlipFlopModule.stopTimeline();
     }
 
     public static void main(String[] args) {
