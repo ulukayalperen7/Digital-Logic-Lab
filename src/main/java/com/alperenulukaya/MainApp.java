@@ -1,9 +1,10 @@
 // FILE: src/main/java/com/alperenulukaya/MainApp.java
 package com.alperenulukaya;
 
-import com.alperenulukaya.modules.CounterModule; // Using wildcard for cleaner imports
+import com.alperenulukaya.modules.CounterModule;
 import com.alperenulukaya.modules.DLatchModule;
 import com.alperenulukaya.modules.JKFlipFlopModule;
+import com.alperenulukaya.modules.MasterSlaveModule;
 import com.alperenulukaya.modules.MuxModule;
 import com.alperenulukaya.modules.SRLatchModule;
 import com.alperenulukaya.modules.ShiftRegisterModule;
@@ -37,9 +38,10 @@ public class MainApp extends Application {
     private CounterModule counterModule;
     private SRLatchModule srLatchModule;
     private DLatchModule dLatchModule;
-    private JKFlipFlopModule jkFlipFlopModule;
+    private MasterSlaveModule masterSlaveModule; // New module
     private TFlipFlopModule tFlipFlopModule;
-    private ShiftRegisterModule shiftRegisterModule; // New module instance
+    private JKFlipFlopModule jkFlipFlopModule;
+    private ShiftRegisterModule shiftRegisterModule;
     private MuxModule muxModule;
 
     @Override
@@ -69,23 +71,23 @@ public class MainApp extends Application {
         menuBox.setStyle("-fx-background-color: #3C3F41; -fx-border-color: #2B2B2B; -fx-border-width: 0 1 0 0;");
         menuBox.setPrefWidth(220);
 
-        // Create Buttons for each module
         Button counterButton = createMenuButton("4-Bit Sync. Counter", e -> showCounterModule());
-        Button shiftRegisterButton = createMenuButton("Shift Register", e -> showShiftRegisterModule()); // New button
+        Button shiftRegisterButton = createMenuButton("Shift Register", e -> showShiftRegisterModule());
         Button srLatchButton = createMenuButton("SR Latch", e -> showSRLatchModule());
         Button dLatchButton = createMenuButton("Gated D Latch", e -> showDLatchModule());
+        Button masterSlaveButton = createMenuButton("Master-Slave D-FF", e -> showMasterSlaveModule());
         Button tFlipFlopButton = createMenuButton("T Flip-Flop", e -> showTFlipFlopModule());
         Button jkFlipFlopButton = createMenuButton("JK Flip-Flop", e -> showJKFlipFlopModule());
         Button muxButton = createMenuButton("Multiplexer (MUX)", e -> showMuxModule());
 
-        // Add buttons under their respective headers
         menuBox.getChildren().addAll(
             createMenuHeader("Applications"),
             counterButton,
-            shiftRegisterButton, // Add button to menu
+            shiftRegisterButton,
             createMenuHeader("Latches & Flip-Flops"),
             srLatchButton,
             dLatchButton,
+            masterSlaveButton,
             tFlipFlopButton,
             jkFlipFlopButton,
             createMenuHeader("Combinational Logic"),
@@ -111,6 +113,7 @@ public class MainApp extends Application {
     }
 
     private Node createWelcomeScreen() {
+        // ... (unchanged)
         Label welcomeLabel = new Label("Welcome to the Digital Logic Lab!\n\nPlease select an experiment from the menu.");
         welcomeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         welcomeLabel.setTextFill(Color.WHITE);
@@ -130,32 +133,30 @@ public class MainApp extends Application {
         if (counterModule == null) counterModule = new CounterModule();
         switchModule(counterModule.getView(), "4-Bit Counter");
     }
-    
     private void showShiftRegisterModule() {
         if (shiftRegisterModule == null) shiftRegisterModule = new ShiftRegisterModule();
         switchModule(shiftRegisterModule.getView(), "Shift Register");
     }
-
     private void showSRLatchModule() {
         if (srLatchModule == null) srLatchModule = new SRLatchModule();
         switchModule(srLatchModule.getView(), "SR Latch");
     }
-
     private void showDLatchModule() {
         if (dLatchModule == null) dLatchModule = new DLatchModule();
         switchModule(dLatchModule.getView(), "D Latch");
     }
-
+    private void showMasterSlaveModule() {
+        if (masterSlaveModule == null) masterSlaveModule = new MasterSlaveModule();
+        switchModule(masterSlaveModule.getView(), "Master-Slave D-FF");
+    }
     private void showJKFlipFlopModule() {
         if (jkFlipFlopModule == null) jkFlipFlopModule = new JKFlipFlopModule();
         switchModule(jkFlipFlopModule.getView(), "JK Flip-Flop");
     }
-    
     private void showTFlipFlopModule() {
         if (tFlipFlopModule == null) tFlipFlopModule = new TFlipFlopModule();
         switchModule(tFlipFlopModule.getView(), "T Flip-Flop");
     }
-    
     private void showMuxModule() {
         if (muxModule == null) muxModule = new MuxModule();
         switchModule(muxModule.getView(), "Multiplexer");
@@ -165,9 +166,10 @@ public class MainApp extends Application {
         if (counterModule != null) counterModule.stopTimeline();
         if (srLatchModule != null) srLatchModule.stopTimeline();
         if (dLatchModule != null) dLatchModule.stopTimeline();
+        if(masterSlaveModule != null) masterSlaveModule.stopTimeline();
         if (jkFlipFlopModule != null) jkFlipFlopModule.stopTimeline();
         if (tFlipFlopModule != null) tFlipFlopModule.stopTimeline();
-        if (shiftRegisterModule != null) shiftRegisterModule.stopTimeline(); // Added stop call
+        if (shiftRegisterModule != null) shiftRegisterModule.stopTimeline();
         if (muxModule != null) muxModule.stopTimeline();
     }
 
