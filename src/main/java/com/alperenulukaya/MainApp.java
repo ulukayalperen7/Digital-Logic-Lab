@@ -1,11 +1,12 @@
 package com.alperenulukaya;
 
 import com.alperenulukaya.modules.Adder4BitModule;
+import com.alperenulukaya.modules.Comparator4BitModule;
 import com.alperenulukaya.modules.CounterModule;
 import com.alperenulukaya.modules.DLatchModule;
 import com.alperenulukaya.modules.DecoderModule;
 import com.alperenulukaya.modules.EncoderModule;
-import com.alperenulukaya.modules.FullAdderModule; // <-- 1. Import the new 4-Bit Adder module
+import com.alperenulukaya.modules.FullAdderModule;
 import com.alperenulukaya.modules.JKFlipFlopModule;
 import com.alperenulukaya.modules.MasterSlaveModule;
 import com.alperenulukaya.modules.MuxModule;
@@ -49,7 +50,8 @@ public class MainApp extends Application {
     private DecoderModule decoderModule;
     private EncoderModule encoderModule;
     private FullAdderModule fullAdderModule;
-    private Adder4BitModule adder4BitModule; // <-- 2. Declare the 4-Bit Adder module instance
+    private Adder4BitModule adder4BitModule;
+    private Comparator4BitModule comparator4BitModule;
 
     @Override
     public void start(Stage primaryStage) {
@@ -90,7 +92,8 @@ public class MainApp extends Application {
         Button decoderButton = createMenuButton("3-to-8 Decoder", e -> showDecoderModule());
         Button encoderButton = createMenuButton("8-to-3 Encoder", e -> showEncoderModule());
         Button fullAdderButton = createMenuButton("1-Bit Full Adder", e -> showFullAdderModule());
-        Button adder4BitButton = createMenuButton("4-Bit Adder", e -> showAdder4BitModule()); // <-- 3. Create the button for the new module
+        Button adder4BitButton = createMenuButton("4-Bit Adder", e -> showAdder4BitModule());
+        Button comparatorButton = createMenuButton("4-Bit Comparator", e -> showComparatorModule());
 
         // Add all components to the menu VBox
         menuBox.getChildren().addAll(
@@ -108,7 +111,8 @@ public class MainApp extends Application {
                 decoderButton,
                 encoderButton,
                 fullAdderButton,
-                adder4BitButton // <-- 4. Add the button to the menu
+                adder4BitButton,
+                comparatorButton
         );
 
         return menuBox;
@@ -118,7 +122,6 @@ public class MainApp extends Application {
         Button button = new Button(text);
         button.setMaxWidth(Double.MAX_VALUE);
         button.setOnAction(handler);
-        // Add any common styling for buttons here if desired
         return button;
     }
 
@@ -223,11 +226,18 @@ public class MainApp extends Application {
         switchModule(fullAdderModule.getView(), "1-Bit Full Adder");
     }
 
-    private void showAdder4BitModule() { // <-- 5. Add the method to show the new module
+    private void showAdder4BitModule() {
         if (adder4BitModule == null) {
             adder4BitModule = new Adder4BitModule();
         }
         switchModule(adder4BitModule.getView(), "4-Bit Adder");
+    }
+
+    private void showComparatorModule() {
+        if (comparator4BitModule == null) {
+            comparator4BitModule = new Comparator4BitModule();
+        }
+        switchModule(comparator4BitModule.getView(), "4-Bit Comparator");
     }
 
     private void stopAllTimelines() {
@@ -265,9 +275,12 @@ public class MainApp extends Application {
             fullAdderModule.stopTimeline();
         }
         if (adder4BitModule != null) {
-            adder4BitModule.stopTimeline(); // <-- 6. Add the module to the cleanup method
-
-            }}
+            adder4BitModule.stopTimeline();
+        }
+        if (comparator4BitModule != null) {
+            comparator4BitModule.stopTimeline();
+        }
+    }
 
     public static void main(String[] args) {
         launch(args);
