@@ -3,7 +3,7 @@
 ![Java](https://img.shields.io/badge/Java-17-orange) ![JavaFX](https://img.shields.io/badge/JavaFX-17-blue) ![Maven](https://img.shields.io/badge/Maven-3.8-red)
 
 <p align="center">
-  <img src="assets/Animation.gif" alt="CPU Simulator Animation Demo" width="800"/>
+  <img src="https://github.com/ulukayalperen7/Digital-Logic-Lab/blob/master/assets/Animation.gif?raw=true" alt="CPU Simulator Animation Demo" width="800"/>
 </p>
 
 An interactive desktop application built with **JavaFX** to simulate and visualize fundamental digital logic circuits, from basic latches to a fully functional 4-bit CPU. This project was developed as a hands-on tool to solidify concepts learned in digital design courses, providing a dynamic way to see abstract theories in action.
@@ -22,7 +22,7 @@ The highlight of the lab is a fully animated Von Neumann architecture CPU that c
 - **Full Execution Control:** `Animate Step` through the program instruction by instruction, or `Run` it automatically at an adjustable speed.
 
 <p align="center">
-  <img src="assets/CPUSim.png" alt="CPU Simulator Interface" width="800"/>
+  <img src="https://github.com/ulukayalperen7/Digital-Logic-Lab/blob/master/assets/CPUsim.png?raw=true" alt="CPU Simulator Interface" width="800"/>
 </p>
 
 ### Sequential & Combinational Logic
@@ -31,7 +31,7 @@ Visualize the core principles of digital circuits with a rich set of modules.
 - **Combinational Circuits:** Interact with Multiplexers, Decoders, Encoders, Adders, and Comparators.
 
 <p align="center">
-  <img src="assets/JKff.png" alt="JK Flip-Flop with Timing Diagram" width="800"/>
+  <img src="https://github.com/ulukayalperen7/Digital-Logic-Lab/blob/master/assets/JKff.png?raw=true" alt="JK Flip-Flop with Timing Diagram" width="800"/>
 </p>
 
 ### Practical Applications
