@@ -1,4 +1,3 @@
-// FILE: src/main/java/com/alperenulukaya/modules/MuxModule.java
 package com.alperenulukaya.modules;
 
 import java.util.ArrayList;
@@ -28,12 +27,14 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 /**
- * The final, polished version of the MUX UI module.
- * Features a larger, clearer layout, correct wiring, and enhanced visual feedback for the active path.
+ * The final, polished version of the MUX UI module. Features a larger, clearer
+ * layout, correct wiring, and enhanced visual feedback for the active path.
  */
 public class MuxModule {
 
-    private enum MuxType { MUX_4_TO_1, MUX_8_TO_1 }
+    private enum MuxType {
+        MUX_4_TO_1, MUX_8_TO_1
+    }
     private MuxType currentMuxType = MuxType.MUX_4_TO_1;
 
     private final VBox view;
@@ -60,26 +61,36 @@ public class MuxModule {
         view = new VBox(10);
         view.setPadding(new Insets(20));
         view.setAlignment(Pos.TOP_CENTER);
-        
+
         Label title = createTitleArea();
         HBox modeSelector = createModeSelector();
-        
+
         circuitPane = new Pane();
-        circuitPane.setPrefSize(800, 600); 
+        circuitPane.setPrefSize(800, 600);
 
         view.getChildren().addAll(title, modeSelector, circuitPane);
-        
+
         redrawUI();
     }
 
-    public Node getView() { return view; }
-    public void stopTimeline() { /* No timeline */ }
+    public Node getView() {
+        return view;
+    }
+
+    public void stopTimeline() {
+        /* No timeline */ }
 
     private void setMuxType(MuxType type) {
-        if (this.currentMuxType == type) return;
+        if (this.currentMuxType == type) {
+            return;
+        }
         this.currentMuxType = type;
-        for (int i = 0; i < dataInputs.length; i++) dataInputs[i] = false;
-        for (int i = 0; i < selectInputs.length; i++) selectInputs[i] = false;
+        for (int i = 0; i < dataInputs.length; i++) {
+            dataInputs[i] = false;
+        }
+        for (int i = 0; i < selectInputs.length; i++) {
+            selectInputs[i] = false;
+        }
         redrawUI();
     }
 
@@ -99,16 +110,16 @@ public class MuxModule {
         Rectangle body = new Rectangle(startX, startY, muxWidth, muxHeight);
         body.setFill(Color.CORNFLOWERBLUE);
         body.setStroke(Color.BLACK);
-        
+
         String label = (numDataInputs == 4) ? "4-to-1\nMUX" : "8-to-1\nMUX";
         Text muxLabel = new Text(startX + muxWidth / 2 - 45, startY + muxHeight / 2 - 25, label);
         muxLabel.setFont(Font.font("Arial", FontWeight.BOLD, 28));
         circuitPane.getChildren().addAll(body, muxLabel);
-        
+
         for (int i = 0; i < numDataInputs; i++) {
             final int index = i;
             double yPos = startY + 30 + i * 50;
-            
+
             Label inputLabel = new Label("I" + i);
             inputLabel.setFont(Font.font("Consolas", 18));
             inputLabel.setTextFill(Color.WHITE);
@@ -127,12 +138,12 @@ public class MuxModule {
             dataButtons.add(btn);
             circuitPane.getChildren().addAll(inputLabel, btn);
         }
-        
+
         double buttonWidth = 50;
         double spacing = 80;
         double totalGroupWidth = (numSelectInputs * buttonWidth) + ((numSelectInputs - 1) * (spacing - buttonWidth));
         double selectStartX = (startX + muxWidth / 2) - (totalGroupWidth / 2);
-        
+
         for (int i = 0; i < numSelectInputs; i++) {
             final int index = i;
             Button btn = new Button("0");
@@ -144,17 +155,17 @@ public class MuxModule {
                 selectInputs[index] = !selectInputs[index];
                 updateVisuals();
             });
-            
+
             Label selectLabel = new Label("S" + (numSelectInputs - 1 - i));
             selectLabel.setFont(Font.font("Consolas", 18));
             selectLabel.setTextFill(Color.WHITE);
             selectLabel.setLayoutX(btn.getLayoutX() + 15);
             selectLabel.setLayoutY(btn.getLayoutY() + 35);
-            
+
             selectButtons.add(btn);
             circuitPane.getChildren().addAll(selectLabel, btn);
         }
-        
+
         double outputY = startY + muxHeight / 2;
         outputLed = new Circle(30, LED_OFF_COLOR);
         outputLed.setStroke(Color.BLACK);
@@ -172,7 +183,7 @@ public class MuxModule {
         selectedIndexLabel.setTextFill(Color.ORANGE);
         selectedIndexLabel.setLayoutX(outputLed.getLayoutX() - 40);
         selectedIndexLabel.setLayoutY(outputY + 40);
-        
+
         circuitPane.getChildren().addAll(outputLed, yLabel, selectedIndexLabel);
 
         updateVisuals();
@@ -190,7 +201,7 @@ public class MuxModule {
             selectButtons.get(i).setText(selectInputs[i] ? "1" : "0");
             selectButtons.get(i).setStyle(selectInputs[i] ? ACTIVE_STYLE : INACTIVE_STYLE);
         }
-        
+
         boolean output;
         int activeIndex;
         if (currentMuxType == MuxType.MUX_4_TO_1) {
@@ -203,19 +214,19 @@ public class MuxModule {
             output = mux8to1.getOutput(dataInputs, s[0], s[1], s[2]);
             activeIndex = (s[0] ? 4 : 0) + (s[1] ? 2 : 0) + (s[2] ? 1 : 0);
         }
-        
+
         Color ledEndColor = output ? PATH_ACTIVE_1_COLOR : LED_OFF_COLOR;
-        FillTransition ft = new FillTransition(Duration.millis(200), outputLed, (Color)outputLed.getFill(), ledEndColor);
+        FillTransition ft = new FillTransition(Duration.millis(200), outputLed, (Color) outputLed.getFill(), ledEndColor);
         ft.play();
-        
+
         selectedIndexLabel.setText("(Selects I" + activeIndex + ")");
-        
+
         drawPaths(numDataInputs, activeIndex, output);
     }
 
     private void drawPaths(int numDataInputs, int activeIndex, boolean outputValue) {
         circuitPane.getChildren().removeIf(n -> n instanceof Line);
-        
+
         double muxStartX = 300;
         double muxWidth = 180;
         double muxHeight = 50 + numDataInputs * 50;
@@ -229,7 +240,7 @@ public class MuxModule {
             double yPos = startY + 30 + i * 50;
             Line path = new Line(muxStartX - 30, yPos, muxStartX, yPos);
             path.setStrokeWidth(5);
-            path.setStroke( (i == activeIndex) ? activePathColor : PATH_INACTIVE_COLOR );
+            path.setStroke((i == activeIndex) ? activePathColor : PATH_INACTIVE_COLOR);
             circuitPane.getChildren().add(path);
         }
 
@@ -239,13 +250,13 @@ public class MuxModule {
         connector.setStroke(activePathColor);
         connector.setStrokeWidth(5);
         circuitPane.getChildren().add(connector);
-        
+
         // Draw Output Path
         Line outputPath = new Line(muxStartX + muxWidth, outputY, outputLed.getLayoutX() - 30, outputY);
         outputPath.setStroke(activePathColor);
         outputPath.setStrokeWidth(5);
         circuitPane.getChildren().add(outputPath);
-        
+
         // Draw Select Lines Connection
         int numSelectInputs = selectButtons.size();
         for (int i = 0; i < numSelectInputs; i++) {
@@ -256,14 +267,14 @@ public class MuxModule {
             circuitPane.getChildren().add(selectLine);
         }
     }
-    
+
     private Label createTitleArea() {
         Label title = new Label("Dynamic Multiplexer Simulator");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
         title.setTextFill(Color.WHITE);
         return title;
     }
-    
+
     private HBox createModeSelector() {
         ToggleGroup group = new ToggleGroup();
         RadioButton mux4Btn = new RadioButton("4-to-1 MUX");

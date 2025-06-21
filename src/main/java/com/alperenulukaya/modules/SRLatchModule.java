@@ -1,4 +1,3 @@
-// FILE: src/main/java/com/alperenulukaya/modules/SRLatchModule.java
 package com.alperenulukaya.modules;
 
 import java.util.Map;
@@ -27,12 +26,15 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 /**
- * A comprehensive UI module for demonstrating both NOR-based and NAND-based SR Latches.
- * Features toggleable inputs, a dynamic characteristic table, and a timing diagram.
+ * A comprehensive UI module for demonstrating both NOR-based and NAND-based SR
+ * Latches. Features toggleable inputs, a dynamic characteristic table, and a
+ * timing diagram.
  */
 public class SRLatchModule {
 
-    private enum LatchType { NOR, NAND }
+    private enum LatchType {
+        NOR, NAND
+    }
     private LatchType currentLatchType = LatchType.NOR;
 
     private final VBox view;
@@ -47,7 +49,6 @@ public class SRLatchModule {
     private Label[][] tableCellLabels = new Label[4][4];
     private TimingDiagram timingDiagram;
 
-    // State Variables
     private boolean sInput = false;
     private boolean rInput = false;
 
@@ -62,26 +63,28 @@ public class SRLatchModule {
         view = new VBox(20);
         view.setPadding(new Insets(20));
         view.setAlignment(Pos.TOP_CENTER);
-        
+
         Label title = createTitleArea();
         HBox modeSelector = createModeSelector();
         HBox interactionArea = createInteractionArea();
 
         view.getChildren().addAll(title, modeSelector, interactionArea);
-        
+
         Button resetButton = new Button("Reset Latch & Diagram");
         resetButton.setFont(Font.font(16));
         resetButton.setOnAction(e -> resetAll());
         view.getChildren().add(resetButton);
-        
+
         updateLatchTypeUI();
         updateLogicAndUI();
     }
 
-    public Node getView() { return view; }
-    public void stopTimeline() { /* No timeline */ }
+    public Node getView() {
+        return view;
+    }
 
-    // --- UI Creation ---
+    public void stopTimeline() {
+        /* No timeline */ }
 
     private Label createTitleArea() {
         Label title = new Label("SR Latch Simulator");
@@ -94,14 +97,14 @@ public class SRLatchModule {
         ToggleGroup group = new ToggleGroup();
         RadioButton norButton = new RadioButton("NOR-based (Active-High)");
         RadioButton nandButton = new RadioButton("NAND-based (Active-Low)");
-        
+
         norButton.setToggleGroup(group);
         nandButton.setToggleGroup(group);
         norButton.setSelected(true);
-        
+
         norButton.setTextFill(Color.WHITE);
         nandButton.setTextFill(Color.WHITE);
-        
+
         norButton.setOnAction(e -> setLatchType(LatchType.NOR));
         nandButton.setOnAction(e -> setLatchType(LatchType.NAND));
 
@@ -114,18 +117,18 @@ public class SRLatchModule {
     private HBox createInteractionArea() {
         VBox leftPanel = new VBox(30, createInputControls(), createCircuitDiagram());
         leftPanel.setAlignment(Pos.CENTER);
-        
+
         VBox rightPanel = createRightPanel();
-        
+
         return new HBox(50, leftPanel, rightPanel);
     }
-    
+
     private VBox createRightPanel() {
         HBox outputs = createOutputDisplays();
         VBox table = createTruthTable();
-        
+
         timingDiagram = new TimingDiagram(500, "S", "R", "Q");
-        
+
         VBox rightPanel = new VBox(30, outputs, table, timingDiagram.getCanvas());
         rightPanel.setAlignment(Pos.CENTER);
         return rightPanel;
@@ -145,12 +148,12 @@ public class SRLatchModule {
             rInput = !rInput;
             updateLogicAndUI();
         });
-        
+
         VBox box = new VBox(20, sButton, rButton);
         box.setAlignment(Pos.CENTER);
         return box;
     }
-    
+
     private HBox createOutputDisplays() {
         qLed = new Circle(30, Color.DARKSLATEGRAY);
         qNotLed = new Circle(30, Color.DARKSLATEGRAY);
@@ -159,10 +162,10 @@ public class SRLatchModule {
 
         VBox qBox = createLabeledLed("Q", qLed);
         VBox qNotBox = createLabeledLed("Q'", qNotLed);
-        
+
         return new HBox(40, qBox, qNotBox);
     }
-    
+
     private VBox createLabeledLed(String labelText, Circle led) {
         Label label = new Label(labelText);
         label.setFont(Font.font("Arial", FontWeight.BOLD, 24));
@@ -171,35 +174,39 @@ public class SRLatchModule {
         box.setAlignment(Pos.CENTER);
         return box;
     }
-    
+
     private Pane createCircuitDiagram() {
         Pane pane = new Pane();
         pane.setPrefSize(250, 200);
         Rectangle body = new Rectangle(50, 50, 150, 100);
         body.setFill(Color.CORNFLOWERBLUE);
         body.setStroke(Color.BLACK);
-        
+
         Text blockLabel = new Text("SR Latch");
         blockLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         blockLabel.relocate(85, 90);
-        
+
         Line sLine = new Line(0, 75, 50, 75);
         Line rLine = new Line(0, 125, 50, 125);
         Line qLine = new Line(200, 75, 250, 75);
         Line qNotLine = new Line(200, 125, 250, 125);
-        
-        for(Line line : new Line[]{sLine, rLine, qLine, qNotLine}){
+
+        for (Line line : new Line[]{sLine, rLine, qLine, qNotLine}) {
             line.setStroke(Color.GRAY);
             line.setStrokeWidth(3);
         }
-        
-        Text sText = new Text( -20, 80, "S"); sText.setFont(Font.font(20)); sText.setFill(Color.WHITE);
-        Text rText = new Text( -20, 130, "R"); rText.setFont(Font.font(20)); rText.setFill(Color.WHITE);
-        
+
+        Text sText = new Text(-20, 80, "S");
+        sText.setFont(Font.font(20));
+        sText.setFill(Color.WHITE);
+        Text rText = new Text(-20, 130, "R");
+        rText.setFont(Font.font(20));
+        rText.setFill(Color.WHITE);
+
         pane.getChildren().addAll(body, blockLabel, sLine, rLine, qLine, qNotLine, sText, rText);
         return pane;
     }
-    
+
     private VBox createTruthTable() {
         truthTable = new GridPane();
         truthTable.setAlignment(Pos.CENTER);
@@ -226,21 +233,20 @@ public class SRLatchModule {
                 truthTable.add(tableCellLabels[i][j], j, i + 1);
             }
         }
-        
+
         tableTitle = new Label();
         tableTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         tableTitle.setTextFill(Color.WHITE);
 
         return new VBox(10, tableTitle, truthTable);
     }
-    
-    // --- Logic and UI Update ---
 
+    // --- Logic and UI Update ---
     private void setLatchType(LatchType type) {
         this.currentLatchType = type;
         resetAll();
     }
-    
+
     private void resetAll() {
         sInput = false;
         rInput = false;
@@ -250,7 +256,7 @@ public class SRLatchModule {
         updateLatchTypeUI();
         updateLogicAndUI();
     }
-    
+
     private void updateLatchTypeUI() {
         String[][] norData = {
             {"0", "0", "Q(t)", "Hold"}, {"0", "1", "0", "Reset"},
@@ -260,17 +266,17 @@ public class SRLatchModule {
             {"0", "0", "1", "Invalid"}, {"0", "1", "1", "Set"},
             {"1", "0", "0", "Reset"}, {"1", "1", "Q(t)", "Hold"}
         };
-        
+
         String[][] data = (currentLatchType == LatchType.NOR) ? norData : nandData;
         tableTitle.setText((currentLatchType == LatchType.NOR) ? "NOR-based Table" : "NAND-based Table");
-        
+
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 tableCellLabels[i][j].setText(data[i][j]);
             }
         }
     }
-    
+
     private void updateLogicAndUI() {
         sButton.setText("S=" + (sInput ? "1" : "0"));
         sButton.setStyle(sInput ? ACTIVE_STYLE : INACTIVE_STYLE);
@@ -289,24 +295,24 @@ public class SRLatchModule {
             qLed.setFill(currentQ ? Color.LIMEGREEN : Color.DARKSLATEGRAY);
             qNotLed.setFill(nandLatch.getQNot() ? Color.LIMEGREEN : Color.DARKSLATEGRAY);
         }
-        
+
         timingDiagram.addState(Map.of("S", sInput, "R", rInput, "Q", currentQ));
 
         highlightTableRow();
     }
-    
+
     private void highlightTableRow() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 tableCellLabels[i][j].setStyle(TRANSPARENT_BG);
             }
         }
-        
+
         int rowIndex = (sInput ? 2 : 0) + (rInput ? 1 : 0);
-        
-        boolean isInvalid = (currentLatchType == LatchType.NOR && sInput && rInput) || 
-                            (currentLatchType == LatchType.NAND && !sInput && !rInput);
-        
+
+        boolean isInvalid = (currentLatchType == LatchType.NOR && sInput && rInput)
+                || (currentLatchType == LatchType.NAND && !sInput && !rInput);
+
         String styleToApply = isInvalid ? INVALID_HIGHLIGHT_STYLE : HIGHLIGHT_STYLE;
 
         for (int j = 0; j < 4; j++) {

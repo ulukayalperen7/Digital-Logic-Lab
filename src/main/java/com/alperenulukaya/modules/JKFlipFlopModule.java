@@ -1,4 +1,3 @@
-
 package com.alperenulukaya.modules;
 
 import java.util.Map;
@@ -25,12 +24,12 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 /**
- * A UI module to demonstrate the behavior of a JK Flip-Flop,
- * now including a real-time timing diagram.
+ * A UI module to demonstrate the behavior of a JK Flip-Flop, now including a
+ * real-time timing diagram.
  */
 public class JKFlipFlopModule {
 
-    private final VBox view; // Can be made final
+    private final VBox view;
     private final JKFlipFlop flipFlop = new JKFlipFlop();
 
     // --- UI Elements ---
@@ -38,8 +37,7 @@ public class JKFlipFlopModule {
     private Button jButton, kButton, clockButton;
     private GridPane truthTable;
     private TimingDiagram timingDiagram;
-    
-    // --- State Variables ---
+
     private boolean jInput = false;
     private boolean kInput = false;
 
@@ -54,16 +52,16 @@ public class JKFlipFlopModule {
         view = new VBox(20);
         view.setPadding(new Insets(20));
         view.setAlignment(Pos.TOP_CENTER);
-        
+
         Label title = createTitleArea();
-        
+
         VBox leftPanel = createLeftPanel();
         VBox rightPanel = createRightPanel();
         HBox interactionArea = new HBox(50, leftPanel, rightPanel);
         interactionArea.setAlignment(Pos.CENTER);
 
         view.getChildren().addAll(title, interactionArea);
-        
+
         Button resetButton = new Button("Reset Flip-Flop & Diagram");
         resetButton.setFont(Font.font(16));
         resetButton.setOnAction(e -> {
@@ -112,14 +110,14 @@ public class JKFlipFlopModule {
         leftPanel.setAlignment(Pos.CENTER);
         return leftPanel;
     }
-    
+
     private VBox createRightPanel() {
-        // --- DÜZELTME BURADA ---
-        HBox outputs = createOutputDisplays(); // Dönüş tipi HBox, değişken de HBox olmalı.
+
+        HBox outputs = createOutputDisplays();
         VBox table = createTruthTable();
-        
+
         timingDiagram = new TimingDiagram(500, "CLK", "J", "K", "Q");
-        
+
         VBox rightPanel = new VBox(30, outputs, table, timingDiagram.getCanvas());
         rightPanel.setAlignment(Pos.CENTER);
         return rightPanel;
@@ -128,38 +126,38 @@ public class JKFlipFlopModule {
     private HBox createOutputDisplays() {
         VBox qBox = new VBox(10, new Label("Q"), qLed = new Circle(30, LED_OFF_COLOR));
         qBox.setAlignment(Pos.CENTER);
-        
+
         VBox qNotBox = new VBox(10, new Label("Q'"), qNotLed = new Circle(30, LED_OFF_COLOR));
         qNotBox.setAlignment(Pos.CENTER);
-        
+
         qLed.setStroke(Color.BLACK);
         qNotLed.setStroke(Color.BLACK);
-        
+
         qBox.getChildren().get(0).setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
         qNotBox.getChildren().get(0).setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;");
-        
+
         HBox outputHBox = new HBox(40, qBox, qNotBox);
         outputHBox.setAlignment(Pos.CENTER);
         return outputHBox;
     }
-    
+
     private Pane createCircuitDiagram() {
         Pane pane = new Pane();
         pane.setPrefSize(250, 200);
         Rectangle body = new Rectangle(50, 25, 150, 150);
         body.setFill(Color.CORNFLOWERBLUE);
         body.setStroke(Color.BLACK);
-        
+
         Polygon clockTriangle = new Polygon(35, 95, 50, 105, 35, 115);
         clockTriangle.setFill(Color.BLACK);
-        
+
         Line jLine = new Line(0, 50, 50, 50);
         Line kLine = new Line(0, 150, 50, 150);
         Line clkLine = new Line(35, 105, 0, 105);
         Line qLine = new Line(200, 50, 250, 50);
         Line qNotLine = new Line(200, 150, 250, 150);
-        
-        for(Line line : new Line[]{jLine, kLine, clkLine, qLine, qNotLine}){
+
+        for (Line line : new Line[]{jLine, kLine, clkLine, qLine, qNotLine}) {
             line.setStroke(Color.GRAY);
             line.setStrokeWidth(3);
         }
@@ -180,19 +178,23 @@ public class JKFlipFlopModule {
             jInput = !jInput;
             updateInputsAndLogic(true);
         });
-        
+
         kButton.setOnAction(e -> {
             kInput = !kInput;
             updateInputsAndLogic(true);
         });
 
-        Text qText = new Text(260, 55, "Q"); qText.setFont(Font.font(20)); qText.setFill(Color.WHITE);
-        Text qNotText = new Text(260, 155, "Q'"); qNotText.setFont(Font.font(20)); qNotText.setFill(Color.WHITE);
+        Text qText = new Text(260, 55, "Q");
+        qText.setFont(Font.font(20));
+        qText.setFill(Color.WHITE);
+        Text qNotText = new Text(260, 155, "Q'");
+        qNotText.setFont(Font.font(20));
+        qNotText.setFill(Color.WHITE);
 
         pane.getChildren().addAll(body, clockTriangle, jLine, kLine, clkLine, qLine, qNotLine, jButton, kButton, qText, qNotText);
         return pane;
     }
-    
+
     private VBox createTruthTable() {
         truthTable = new GridPane();
         truthTable.setAlignment(Pos.CENTER);
@@ -224,14 +226,14 @@ public class JKFlipFlopModule {
                 truthTable.add(cell, j, i + 1);
             }
         }
-        
+
         Label tableTitle = new Label("Characteristic Table");
         tableTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         tableTitle.setTextFill(Color.WHITE);
 
         return new VBox(10, tableTitle, truthTable);
     }
-    
+
     private void updateInputsAndLogic(boolean addStateToDiagram) {
         flipFlop.setInputs(jInput, kInput);
 
@@ -241,23 +243,23 @@ public class JKFlipFlopModule {
 
         updateUI();
     }
-    
+
     private void updateUI() {
         jButton.setText("J=" + (jInput ? "1" : "0"));
         jButton.setStyle(jInput ? BUTTON_ACTIVE_STYLE : BUTTON_INACTIVE_STYLE);
-        
+
         kButton.setText("K=" + (kInput ? "1" : "0"));
         kButton.setStyle(kInput ? BUTTON_ACTIVE_STYLE : BUTTON_INACTIVE_STYLE);
 
         qLed.setFill(flipFlop.getQ() ? LED_ON_COLOR : LED_OFF_COLOR);
         qNotLed.setFill(flipFlop.getQNot() ? LED_ON_COLOR : LED_OFF_COLOR);
-        
+
         for (Node node : truthTable.getChildren()) {
             if (GridPane.getRowIndex(node) > 0) {
                 node.setStyle("-fx-background-color: transparent;");
             }
         }
-        
+
         int rowIndex = (jInput ? 2 : 0) + (kInput ? 1 : 0);
         for (Node node : truthTable.getChildren()) {
             if (GridPane.getRowIndex(node) == rowIndex + 1) {

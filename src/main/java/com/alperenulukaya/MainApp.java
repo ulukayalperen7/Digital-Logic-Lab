@@ -1,6 +1,8 @@
+// FILE: src/main/java/com/alperenulukaya/MainApp.java
 package com.alperenulukaya;
 
 import com.alperenulukaya.modules.Adder4BitModule;
+import com.alperenulukaya.modules.CPUModule;
 import com.alperenulukaya.modules.Comparator4BitModule;
 import com.alperenulukaya.modules.CounterModule;
 import com.alperenulukaya.modules.DLatchModule;
@@ -52,6 +54,7 @@ public class MainApp extends Application {
     private FullAdderModule fullAdderModule;
     private Adder4BitModule adder4BitModule;
     private Comparator4BitModule comparator4BitModule;
+    private CPUModule cpuModule;
 
     @Override
     public void start(Stage primaryStage) {
@@ -78,9 +81,10 @@ public class MainApp extends Application {
         VBox menuBox = new VBox(10);
         menuBox.setPadding(new Insets(20));
         menuBox.setStyle("-fx-background-color: #3C3F41; -fx-border-color: #2B2B2B; -fx-border-width: 0 1 0 0;");
-        menuBox.setPrefWidth(220);
+        menuBox.setPrefWidth(250);
 
         // Create buttons for all modules
+        Button cpuButton = createMenuButton("4-Bit CPU Simulator", e -> showCPUModule());
         Button counterButton = createMenuButton("4-Bit Sync. Counter", e -> showCounterModule());
         Button shiftRegisterButton = createMenuButton("Shift Register", e -> showShiftRegisterModule());
         Button srLatchButton = createMenuButton("SR Latch", e -> showSRLatchModule());
@@ -97,7 +101,8 @@ public class MainApp extends Application {
 
         // Add all components to the menu VBox
         menuBox.getChildren().addAll(
-                createMenuHeader("Applications"),
+                createMenuHeader("Advanced Applications"),
+                cpuButton,
                 counterButton,
                 shiftRegisterButton,
                 createMenuHeader("Latches & Flip-Flops"),
@@ -149,6 +154,13 @@ public class MainApp extends Application {
     }
 
     // --- Show Module Methods ---
+    private void showCPUModule() {
+        if (cpuModule == null) {
+            cpuModule = new CPUModule();
+        }
+        switchModule(cpuModule.getView(), "4-Bit CPU Simulator");
+    }
+
     private void showCounterModule() {
         if (counterModule == null) {
             counterModule = new CounterModule();
@@ -241,6 +253,9 @@ public class MainApp extends Application {
     }
 
     private void stopAllTimelines() {
+        if (cpuModule != null) {
+            cpuModule.stopTimeline();
+        }
         if (counterModule != null) {
             counterModule.stopTimeline();
         }

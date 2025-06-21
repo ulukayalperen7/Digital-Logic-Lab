@@ -1,4 +1,4 @@
-// FILE: src/main/java/com/alperenulukaya/modules/DecoderModule.java
+
 package com.alperenulukaya.modules;
 
 import com.alperenulukaya.logic.Decoder3to8;
@@ -19,7 +19,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 /**
- * A UI module to demonstrate a 3-to-8 line Decoder with an Enable input and connection wires.
+ * A UI module to demonstrate a 3-to-8 line Decoder with an Enable input and
+ * connection wires.
  */
 public class DecoderModule {
 
@@ -50,22 +51,26 @@ public class DecoderModule {
 
         Label title = new Label("3-to-8 Line Decoder with Enable");
         title.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white;");
-        
+
         circuitPane = new Pane();
         circuitPane.setPrefSize(600, 450);
 
         view.getChildren().addAll(title, circuitPane);
-        
+
         drawCircuit();
         updateVisuals();
     }
 
-    public Node getView() { return view; }
-    public void stopTimeline() { /* No timeline */ }
-    
+    public Node getView() {
+        return view;
+    }
+
+    public void stopTimeline() {
+        /* No timeline */ }
+
     private void drawCircuit() {
         circuitPane.getChildren().clear();
-        
+
         double startX = 200;
         double startY = 50;
         double bodyWidth = 150;
@@ -75,7 +80,7 @@ public class DecoderModule {
         Rectangle body = new Rectangle(startX, startY, bodyWidth, bodyHeight);
         body.setFill(Color.CORNFLOWERBLUE);
         body.setStroke(Color.BLACK);
-        
+
         Text label = new Text("3-to-8\nDecoder");
         label.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         label.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
@@ -87,7 +92,7 @@ public class DecoderModule {
         for (int i = 0; i < 3; i++) {
             final int index = i;
             double yPos = startY + 60 + i * 60;
-            
+
             Button btn = new Button("0");
             btn.setPrefWidth(50);
             btn.setLayoutX(50);
@@ -97,13 +102,13 @@ public class DecoderModule {
                 updateVisuals();
             });
             inputButtons[i] = btn;
-            
-            Label inputLabel = new Label("A" + (2-i));
+
+            Label inputLabel = new Label("A" + (2 - i));
             inputLabel.setFont(Font.font("Consolas", FontWeight.BOLD, 18));
             inputLabel.setTextFill(Color.WHITE);
             inputLabel.setLayoutX(10);
             inputLabel.setLayoutY(yPos - 10);
-            
+
             Line wire = new Line(100, yPos, startX, yPos);
             wire.setStroke(WIRE_COLOR);
             wire.setStrokeWidth(3);
@@ -120,34 +125,34 @@ public class DecoderModule {
             enableInput = !enableInput;
             updateVisuals();
         });
-        
+
         Label enableLabel = new Label("E");
         enableLabel.setFont(Font.font("Consolas", FontWeight.BOLD, 18));
         enableLabel.setTextFill(Color.WHITE);
         enableLabel.setLayoutX(enableButton.getLayoutX() + 20);
         enableLabel.setLayoutY(enableButton.getLayoutY() - 25);
-        
+
         Line enableWire = new Line(enableButton.getLayoutX() + 25, 35, enableButton.getLayoutX() + 25, startY);
         enableWire.setStroke(WIRE_COLOR);
         enableWire.setStrokeWidth(3);
-        
+
         circuitPane.getChildren().addAll(enableLabel, enableButton, enableWire);
-        
+
         // Output LEDs and Wires
         for (int i = 0; i < 8; i++) {
             double yPos = startY + 25 + i * 40;
-            
+
             Circle led = new Circle(15);
             led.setLayoutX(startX + bodyWidth + 50);
             led.setLayoutY(yPos);
             outputLeds[i] = led;
-            
+
             Label outputLabel = new Label("Y" + i);
             outputLabel.setFont(Font.font("Consolas", FontWeight.BOLD, 18));
             outputLabel.setTextFill(Color.WHITE);
             outputLabel.setLayoutX(led.getLayoutX() + 25);
             outputLabel.setLayoutY(yPos - 12);
-            
+
             Line wire = new Line(startX + bodyWidth, yPos, led.getLayoutX(), yPos);
             wire.setStroke(WIRE_COLOR);
             wire.setStrokeWidth(3);
@@ -162,14 +167,14 @@ public class DecoderModule {
             inputButtons[i].setText(inputs[i] ? "1" : "0");
             inputButtons[i].setStyle(inputs[i] ? ACTIVE_STYLE : INACTIVE_STYLE);
         }
-        
+
         // Update enable button
         enableButton.setText(enableInput ? "1" : "0");
         enableButton.setStyle(enableInput ? ACTIVE_STYLE : INACTIVE_STYLE);
 
         // Get the active output from the logic
         int activeIndex = decoder.getActiveOutput(enableInput, inputs[0], inputs[1], inputs[2]);
-        
+
         // Update output LEDs
         for (int i = 0; i < 8; i++) {
             outputLeds[i].setFill(i == activeIndex ? LED_ON_COLOR : LED_OFF_COLOR);

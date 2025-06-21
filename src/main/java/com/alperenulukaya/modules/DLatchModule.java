@@ -3,7 +3,7 @@ package com.alperenulukaya.modules;
 
 import java.util.Map;
 
-import com.alperenulukaya.logic.DLatch; // GÜNCELLEME 1
+import com.alperenulukaya.logic.DLatch;
 import com.alperenulukaya.util.TimingDiagram;
 
 import javafx.geometry.Insets;
@@ -35,7 +35,7 @@ public class DLatchModule {
     private Circle qLed;
     private Text stateDescription;
     private Button dButton, eButton;
-    private TimingDiagram timingDiagram; // GÜNCELLEME 2
+    private TimingDiagram timingDiagram; 
     
     // --- State Variables ---
     private boolean dInput = false;
@@ -54,7 +54,6 @@ public class DLatchModule {
         
         Label title = createTitleArea();
         
-        // GÜNCELLEME 3: Arayüz yapısını değiştiriyoruz
         VBox leftPanel = createLeftPanel(); // Inputs and circuit
         VBox rightPanel = createRightPanel(); // Outputs and timing diagram
         HBox interactionArea = new HBox(50, leftPanel, rightPanel);
@@ -197,7 +196,6 @@ public class DLatchModule {
         
         latch.update(dInput, eInput);
         
-        // GÜNCELLEME 4: Add the current state to the timing diagram
         timingDiagram.addState(Map.of(
             "E", eInput,
             "D", dInput,

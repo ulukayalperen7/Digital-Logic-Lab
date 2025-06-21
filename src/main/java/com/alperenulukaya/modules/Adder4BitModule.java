@@ -1,4 +1,3 @@
-
 package com.alperenulukaya.modules;
 
 import com.alperenulukaya.logic.Adder4Bit;
@@ -21,8 +20,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 /**
- * A completely redesigned UI module for a 4-bit Ripple-Carry Adder.
- * The implementation is based on a static layout with dynamic property updates.
+ * A completely redesigned UI module for a 4-bit Ripple-Carry Adder. The
+ * implementation is based on a static layout with dynamic property updates.
  */
 public class Adder4BitModule {
 
@@ -75,21 +74,25 @@ public class Adder4BitModule {
         resetButton.setOnAction(e -> reset());
         HBox controlBox = new HBox(resetButton);
         controlBox.setAlignment(Pos.CENTER);
-        
+
         view.getChildren().addAll(title, circuitPane, controlBox);
-        
+
         // Build the circuit layout once
         drawCircuit();
         // Set the initial visual state
         updateVisuals();
     }
 
-    public Node getView() { return view; }
-    public void stopTimeline() { /* No timeline */ }
+    public Node getView() {
+        return view;
+    }
+
+    public void stopTimeline() {
+        /* No timeline */ }
 
     private void drawCircuit() {
         circuitPane.getChildren().clear();
-        
+
         double bodyX = 350, bodyY = 75, bodyW = 150, bodyH = 350;
 
         // --- Component Body ---
@@ -148,7 +151,6 @@ public class Adder4BitModule {
     }
 
     // --- Helper methods for building the static circuit ---
-
     private void createInputGroup(Pane pane, String groupLabelText, Button[] buttons, Line[] wires, double x, double y, double destX, java.util.function.Function<Integer, Double> destYFunc) {
         Label groupLabel = new Label(groupLabelText);
         groupLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
@@ -161,21 +163,30 @@ public class Adder4BitModule {
             final int index = 3 - i;
             double currentY = y + i * 40;
             HBox box = createButtonBox(groupLabelText.substring(6) + index, e -> {
-                if (groupLabelText.contains("A")) inputsA[index] = !inputsA[index];
-                else inputsB[index] = !inputsB[index];
+                if (groupLabelText.contains("A")) {
+                    inputsA[index] = !inputsA[index]; 
+                }else {
+                    inputsB[index] = !inputsB[index];
+                }
                 updateVisuals();
             });
             box.setLayoutX(x);
             box.setLayoutY(currentY);
-            
-            if (groupLabelText.contains("A")) buttons[index] = (Button) box.getChildren().get(1);
-            else buttons[index] = (Button) box.getChildren().get(1);
-            
+
+            if (groupLabelText.contains("A")) {
+                buttons[index] = (Button) box.getChildren().get(1); 
+            }else {
+                buttons[index] = (Button) box.getChildren().get(1);
+            }
+
             Line wire = new Line(x + 150, currentY + 15, destX, destYFunc.apply(i));
             wire.setStrokeWidth(2);
-            if (groupLabelText.contains("A")) aWires[index] = wire;
-            else bWires[index] = wire;
-            
+            if (groupLabelText.contains("A")) {
+                aWires[index] = wire; 
+            }else {
+                bWires[index] = wire;
+            }
+
             pane.getChildren().addAll(box, wire);
         }
     }
@@ -201,7 +212,7 @@ public class Adder4BitModule {
             HBox box = createLedBox(prefix + index);
             box.setLayoutX(x);
             box.setLayoutY(currentY);
-            
+
             leds[index] = (Circle) box.getChildren().get(0);
 
             wires[index] = new Line(startX, currentY + 15, x, currentY + 15);
@@ -221,12 +232,12 @@ public class Adder4BitModule {
         cOutWire.setStrokeWidth(2);
         pane.getChildren().addAll(box, cOutWire);
     }
-    
+
     private HBox createButtonBox(String labelText, EventHandler<ActionEvent> handler) {
         Label label = new Label(labelText);
         label.setFont(Font.font("Consolas", FontWeight.BOLD, 18));
         label.setTextFill(Color.WHITE);
-        
+
         Button btn = new Button("0");
         btn.setPrefWidth(50);
         btn.setStyle(INACTIVE_STYLE);
@@ -237,20 +248,20 @@ public class Adder4BitModule {
         box.setPrefWidth(150);
         return box;
     }
-    
+
     private HBox createLedBox(String labelText) {
         Label label = new Label(labelText);
         label.setFont(Font.font("Consolas", FontWeight.BOLD, 18));
         label.setTextFill(Color.WHITE);
-        
+
         Circle led = new Circle(15, LED_OFF_COLOR);
         led.setStroke(Color.BLACK);
-        
+
         HBox box = new HBox(10, led, label);
         box.setAlignment(Pos.CENTER_LEFT);
         return box;
     }
-    
+
     private VBox createComponentBody(double x, double y, double w, double h, String text) {
         VBox box = new VBox();
         box.setAlignment(Pos.CENTER);

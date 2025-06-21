@@ -1,4 +1,3 @@
-
 package com.alperenulukaya.modules;
 
 import java.util.Map;
@@ -22,8 +21,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 /**
- * A UI module to demonstrate a Master-Slave D Flip-Flop.
- * Visualizes the internal master and final slave outputs.
+ * A UI module to demonstrate a Master-Slave D Flip-Flop. Visualizes the
+ * internal master and final slave outputs.
  */
 public class MasterSlaveModule {
 
@@ -52,7 +51,7 @@ public class MasterSlaveModule {
         Label title = createTitleArea();
         HBox mainArea = createMainArea();
         timingDiagram = new TimingDiagram(800, "CLK", "D", "Qm", "Q");
-        
+
         Button resetButton = new Button("Reset Flip-Flop & Diagram");
         resetButton.setFont(Font.font(16));
         resetButton.setOnAction(e -> {
@@ -67,8 +66,12 @@ public class MasterSlaveModule {
         updateInputsAndLogic();
     }
 
-    public Node getView() { return view; }
-    public void stopTimeline() { /* No timeline */ }
+    public Node getView() {
+        return view;
+    }
+
+    public void stopTimeline() {
+        /* No timeline */ }
 
     private Label createTitleArea() {
         Label title = new Label("Master-Slave D Flip-Flop");
@@ -80,7 +83,7 @@ public class MasterSlaveModule {
     private HBox createMainArea() {
         VBox inputs = createInputControls();
         VBox circuit = createCircuitDiagram();
-        
+
         HBox mainArea = new HBox(50, inputs, circuit);
         mainArea.setAlignment(Pos.CENTER);
         mainArea.setPadding(new Insets(20));
@@ -104,7 +107,7 @@ public class MasterSlaveModule {
 
         stateDescription = new Text();
         stateDescription.setFont(Font.font("Consolas", 16));
-        
+
         VBox inputs = new VBox(20, dButton, clkButton, stateDescription);
         inputs.setAlignment(Pos.CENTER_LEFT);
         return inputs;
@@ -113,7 +116,7 @@ public class MasterSlaveModule {
     private VBox createCircuitDiagram() {
         HBox circuit = new HBox(5);
         circuit.setAlignment(Pos.CENTER);
-        
+
         VBox masterBox = createLatchBox("Master", "Qm");
         masterLed = (Circle) masterBox.lookup("#led");
 
@@ -127,54 +130,54 @@ public class MasterSlaveModule {
         circuit.getChildren().addAll(masterBox, connector, slaveBox);
         return new VBox(circuit);
     }
-    
+
     private VBox createLatchBox(String name, String outputLabel) {
         Rectangle body = new Rectangle(120, 150, Color.CORNFLOWERBLUE);
         body.setStroke(Color.BLACK);
-        
+
         Label nameLabel = new Label(name);
         nameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         nameLabel.setTextFill(Color.WHITE); // Make the label text white and prominent
-        
+
         Circle led = new Circle(20, LED_OFF_COLOR);
         led.setId("led"); // Assign an ID to find it later
         led.setStroke(Color.BLACK);
-        
+
         Label outLabel = new Label(outputLabel);
         outLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         outLabel.setTextFill(Color.WHITE);
-        
+
         HBox outputBox = new HBox(10, led, outLabel);
         outputBox.setAlignment(Pos.CENTER);
-        
+
         VBox latchBox = new VBox(10, nameLabel, body, outputBox);
         latchBox.setAlignment(Pos.CENTER);
         return latchBox;
     }
-    
+
     private void updateInputsAndLogic() {
         ff.update(dInput, clkInput);
-        
+
         timingDiagram.addState(Map.of(
-            "CLK", clkInput,
-            "D", dInput,
-            "Qm", ff.getMasterQ(),
-            "Q", ff.getQ()
+                "CLK", clkInput,
+                "D", dInput,
+                "Qm", ff.getMasterQ(),
+                "Q", ff.getQ()
         ));
-        
+
         updateVisuals();
     }
-    
+
     private void updateVisuals() {
         dButton.setText("D = " + (dInput ? "1" : "0"));
         dButton.setStyle(dInput ? ACTIVE_STYLE : INACTIVE_STYLE);
-        
+
         clkButton.setText("CLK = " + (clkInput ? "1" : "0"));
         clkButton.setStyle(clkInput ? ACTIVE_STYLE : INACTIVE_STYLE);
-        
+
         masterLed.setFill(ff.getMasterQ() ? MASTER_LED_ON_COLOR : LED_OFF_COLOR);
         slaveLed.setFill(ff.getQ() ? LED_ON_COLOR : LED_OFF_COLOR);
-        
+
         if (clkInput) {
             stateDescription.setText("Clock is HIGH.\nMaster is transparent.\nSlave is holding.");
             stateDescription.setFill(Color.ORANGE);

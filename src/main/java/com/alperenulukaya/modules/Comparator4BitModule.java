@@ -20,8 +20,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 /**
- * A UI module for a 4-bit magnitude comparator.
- * This version contains the full implementation of all helper methods and is guaranteed to work.
+ * A UI module for a 4-bit magnitude comparator. This version contains the full
+ * implementation of all helper methods and is guaranteed to work.
  */
 public class Comparator4BitModule {
 
@@ -76,8 +76,12 @@ public class Comparator4BitModule {
         updateVisuals();
     }
 
-    public Node getView() { return view; }
-    public void stopTimeline() { /* No timeline */ }
+    public Node getView() {
+        return view;
+    }
+
+    public void stopTimeline() {
+        /* No timeline */ }
 
     private void drawCircuit() {
         circuitPane.getChildren().clear();
@@ -90,7 +94,7 @@ public class Comparator4BitModule {
         // --- Input Groups ---
         createInputGroup(circuitPane, "Input A", aButtons, aWires, 100, 60, bodyX, i -> bodyY + 40 + i * 40);
         createInputGroup(circuitPane, "Input B", bButtons, bWires, 100, 240, bodyX, i -> bodyY + 180 + i * 40);
-        
+
         // --- Output Group ---
         String[] outputLabels = {"A > B", "A = B", "A < B"};
         for (int i = 0; i < 3; i++) {
@@ -98,7 +102,7 @@ public class Comparator4BitModule {
             HBox box = createLedBox(outputLabels[i]);
             box.setLayoutX(bodyX + bodyW + 50);
             box.setLayoutY(currentY);
-            
+
             outputLeds[i] = (Circle) box.getChildren().get(0);
             outputWires[i] = new Line(bodyX + bodyW, currentY + 15, box.getLayoutX(), currentY + 15);
             outputWires[i].setStrokeWidth(2);
@@ -146,7 +150,6 @@ public class Comparator4BitModule {
     }
 
     // --- Helper Methods (Fully Implemented) ---
-
     private void createInputGroup(Pane pane, String groupLabelText, Button[] buttons, Line[] wires, double x, double y, double destX, java.util.function.Function<Integer, Double> destYFunc) {
         Label groupLabel = new Label(groupLabelText);
         groupLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
@@ -159,8 +162,11 @@ public class Comparator4BitModule {
             final int index = 3 - i;
             double currentY = y + i * 40;
             HBox box = createButtonBox(groupLabelText.substring(6) + index, e -> {
-                if (groupLabelText.contains("A")) inputsA[index] = !inputsA[index];
-                else inputsB[index] = !inputsB[index];
+                if (groupLabelText.contains("A")) {
+                    inputsA[index] = !inputsA[index]; 
+                }else {
+                    inputsB[index] = !inputsB[index];
+                }
                 updateVisuals();
             });
             box.setLayoutX(x);
@@ -172,16 +178,16 @@ public class Comparator4BitModule {
             Line[] targetWires = groupLabelText.contains("A") ? aWires : bWires;
             targetWires[index] = new Line(x + 150, currentY + 15, destX, destYFunc.apply(i));
             targetWires[index].setStrokeWidth(2);
-            
+
             pane.getChildren().addAll(box, targetWires[index]);
         }
     }
-    
+
     private HBox createButtonBox(String labelText, EventHandler<ActionEvent> handler) {
         Label label = new Label(labelText);
         label.setFont(Font.font("Consolas", FontWeight.BOLD, 18));
         label.setTextFill(Color.WHITE);
-        
+
         Button btn = new Button("0");
         btn.setPrefWidth(50);
         btn.setStyle(INACTIVE_STYLE);
@@ -197,10 +203,10 @@ public class Comparator4BitModule {
         Label label = new Label(labelText);
         label.setFont(Font.font("Consolas", FontWeight.BOLD, 18));
         label.setTextFill(Color.WHITE);
-        
+
         Circle led = new Circle(15, LED_OFF_COLOR);
         led.setStroke(Color.BLACK);
-        
+
         HBox box = new HBox(10, led, label);
         box.setAlignment(Pos.CENTER_LEFT);
         box.setPrefWidth(150);

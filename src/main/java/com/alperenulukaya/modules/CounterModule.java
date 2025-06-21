@@ -23,8 +23,8 @@ import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
 /**
- * A self-contained module for the 4-Bit Up/Down Counter simulation.
- * It handles its own UI, logic, and animation.
+ * A self-contained module for the 4-Bit Up/Down Counter simulation. It handles
+ * its own UI, logic, and animation.
  */
 public class CounterModule {
 
@@ -57,7 +57,7 @@ public class CounterModule {
         view = new VBox(20);
         view.setPadding(new Insets(20));
         view.setAlignment(Pos.TOP_CENTER);
-        
+
         Label title = createTitleArea();
         VBox displayArea = createDisplayArea();
         VBox controlArea = createControlArea();
@@ -77,9 +77,8 @@ public class CounterModule {
             autoClockTimeline.stop();
         }
     }
-    
-    // --- UI Creation Methods ---
 
+    // --- UI Creation Methods ---
     private Label createTitleArea() {
         Label title = new Label("4-Bit Up/Down Counter Simulator");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
@@ -93,7 +92,7 @@ public class CounterModule {
         VBox sevenSegmentDisplay = createSevenSegmentDisplay();
         Pane circuitDiagram = createCircuitDiagram();
         HBox infoLabels = createInfoLabels();
-        
+
         VBox centerVBox = new VBox(40, ledBox, sevenSegmentDisplay, circuitDiagram, infoLabels);
         centerVBox.setAlignment(Pos.CENTER);
         return centerVBox;
@@ -114,12 +113,12 @@ public class CounterModule {
         }
         return ledBox;
     }
-    
+
     private VBox createSevenSegmentDisplay() {
         final double segWidth = 80, segHeight = 15;
         Pane displayPane = new Pane();
         displayPane.setPrefSize(segWidth + 2 * segHeight + 10, 2 * segWidth + 3 * segHeight + 10);
-    
+
         double[][] positions = {
             {segHeight + 5, 5},
             {segWidth + segHeight + 5, segHeight + 5},
@@ -139,7 +138,7 @@ public class CounterModule {
             segments[i].relocate(positions[i][0], positions[i][1]);
             displayPane.getChildren().add(segments[i]);
         }
-        
+
         VBox container = new VBox(displayPane);
         container.setAlignment(Pos.CENTER);
         return container;
@@ -208,7 +207,7 @@ public class CounterModule {
 
         HBox topControlRow = new HBox(30, clockButton, resetButton, modeButton);
         topControlRow.setAlignment(Pos.CENTER);
-        
+
         Label speedLabel = new Label("Speed (Hz):");
         speedLabel.setTextFill(Color.WHITE);
         Slider speedSlider = new Slider(0.5, 10, 1);
@@ -223,7 +222,7 @@ public class CounterModule {
                 autoClockTimeline.play();
             }
         });
-        
+
         HBox bottomControlRow = new HBox(15, autoClockButton, speedLabel, speedSlider);
         bottomControlRow.setAlignment(Pos.CENTER);
 
@@ -234,7 +233,6 @@ public class CounterModule {
     }
 
     // --- Event Handlers and Logic ---
-
     private void setupAutoClock(double hertz) {
         if (autoClockTimeline != null) {
             autoClockTimeline.stop();
@@ -275,7 +273,7 @@ public class CounterModule {
             autoClockTimeline.stop();
         }
     }
-    
+
     private void updateUI() {
         int decimalValue = counter.getValue();
         boolean[] bits = counter.getBits();
@@ -296,7 +294,7 @@ public class CounterModule {
         circuitLines[1].setStroke(q0 && q1 ? LINE_ON_COLOR : LINE_OFF_COLOR);
         circuitLines[2].setStroke(q0 && q1 && bits[2] ? LINE_ON_COLOR : LINE_OFF_COLOR);
 
-        binaryLabel.setText(String.format("Binary: %d%d%d%d", bits[3]?1:0, bits[2]?1:0, bits[1]?1:0, bits[0]?1:0));
+        binaryLabel.setText(String.format("Binary: %d%d%d%d", bits[3] ? 1 : 0, bits[2] ? 1 : 0, bits[1] ? 1 : 0, bits[0] ? 1 : 0));
         decimalLabel.setText("Decimal: " + decimalValue);
         hexLabel.setText("Hex: " + Integer.toHexString(decimalValue).toUpperCase());
     }

@@ -1,4 +1,3 @@
-
 package com.alperenulukaya.modules;
 
 import com.alperenulukaya.logic.Encoder8to3;
@@ -136,12 +135,12 @@ public class EncoderModule {
         // Input Wires
         for (int i = 0; i < 8; i++) {
             double yPos = encoderStartY + 25 + i * 40;
-            
+
             // FINAL FIX: Use a fixed X-coordinate for the wire's start point.
             // This avoids the timing issue where the HBox width is not yet calculated on launch.
             // The value 170 is a reliable position just to the right of the input buttons.
-            double wireStartX = 170; 
-            
+            double wireStartX = 170;
+
             Line wire = new Line(wireStartX, yPos, encoderStartX, yPos);
             wire.setStrokeWidth(3);
             wire.setStroke(i == activeInput ? WIRE_ACTIVE_1_COLOR : WIRE_INACTIVE_COLOR);
