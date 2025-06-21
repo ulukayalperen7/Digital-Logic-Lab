@@ -17,12 +17,12 @@ The highlight of the lab is a fully animated Von Neumann architecture CPU that c
 
 - **Interactive Memory:** Load and **edit** your own simple 4-bit programs and data directly in the UI.
 - **Animated Fetch-Decode-Execute Cycle:** Each phase of the CPU's operation is visualized with highlighted components and data paths.
-- **Register & Flag Visualization:** Watch the Program Counter, Accumulator, and other registers change in real-time. Status flags like **Zero (Z)** and **Carry (C)** are also visualized.
+- **Register & Flag Visualization:** Watch the Program Counter, Accumulator, and other registers change in real-time. Status flags like `Zero (Z)` and `Carry (C)` are also visualized.
 - **Mnemonic Display:** The simulator automatically translates 8-bit machine code into human-readable assembly mnemonics (e.g., `LDA E`, `ADD F`).
 - **Full Execution Control:** `Animate Step` through the program instruction by instruction, or `Run` it automatically at an adjustable speed.
 
 <p align="center">
-  <img src="assets/CPUSim.png" alt="CPU Simulator Interface" width="700"/>
+  <img src="assets/CPUSim.png" alt="CPU Simulator Interface" width="800"/>
 </p>
 
 ### Sequential & Combinational Logic
@@ -31,7 +31,7 @@ Visualize the core principles of digital circuits with a rich set of modules.
 - **Combinational Circuits:** Interact with Multiplexers, Decoders, Encoders, Adders, and Comparators.
 
 <p align="center">
-  <img src="assets/JKff.png" alt="JK Flip-Flop with Timing Diagram" width="700"/>
+  <img src="assets/JKff.png" alt="JK Flip-Flop with Timing Diagram" width="800"/>
 </p>
 
 ### Practical Applications
